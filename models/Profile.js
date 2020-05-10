@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const ProfileSchema = new Schema({
   user: {
     // Associates user with id
-    type: Sceham.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     // This is our collection in DB
     ref: "users",
   },
@@ -119,4 +119,4 @@ const ProfileSchema = new Schema({
   },
 });
 
-module.exports = Profile = mongoose.model("profile", ProfileScehma);
+module.exports = Profile = mongoose.model("profile", ProfileSchema);
