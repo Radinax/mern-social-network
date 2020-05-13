@@ -132,7 +132,7 @@ router.get("/all", (req, res) => {
 // @route  GET api/profile/handle/:handle
 // @desc   Get profile by handle
 // @access Public
-route.get("/handle/:handle", (req, res) => {
+router.get("/handle/:handle", (req, res) => {
   const errors = {};
   // params is :handle, its whatever is on the url
   Profile.findOne({ handle: req.params.handle })
@@ -151,7 +151,7 @@ route.get("/handle/:handle", (req, res) => {
 // @route  GET api/profile/user/:user_id
 // @desc   Get profile by user ID
 // @access Public
-route.get("/user/:user_id", (req, res) => {
+router.get("/user/:user_id", (req, res) => {
   const errors = {};
   // params is :handle, its whatever is on the url after :
   Profile.findOne({ handle: req.params.user_id })

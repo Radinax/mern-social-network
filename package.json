@@ -4,7 +4,10 @@
   "description": "Social Network Application",
   "main": "server.js",
   "scripts": {
-    "server": "nodemon server.js"
+    "server": "nodemon server.js",
+    "client-install": "( cd ./client && yarn install)",
+    "client": "( cd ./client && yarn start)",
+    "start": "concurrently \"yarn server\" \"yarn client\""
   },
   "author": "Adrian Beria",
   "license": "MIT",
@@ -14,6 +17,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
+    "concurrently": "^5.2.0",
     "express": "^4.17.1",
     "gravatar": "^1.8.0",
     "jsonwebtoken": "^8.5.1",
