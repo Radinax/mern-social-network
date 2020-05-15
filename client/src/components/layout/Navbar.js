@@ -1,7 +1,54 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { connect } from "react-redux";
+import { logoutUser } from "../../ducks";
 
-const Navbar = () => {
+const mapDispatchToProps = { logoutUser };
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.login.isAuthenticated,
+  user: state.login.user,
+});
+
+const Navbar = ({ isAuthenticated, user, logoutUser }) => {
+  const history = useHistory();
+
+  const onLogOutClick = (e) => {
+    e.preventDefault();
+    logoutUser(history);
+  };
+
+  const authLinks = (
+    <ul className="navbar-nav ml-auto">
+      <li className="nav-item">
+        <button onClick={onLogOutClick} className="nav-link btn btn-link">
+          <img
+            className="rounded-circle"
+            src={user.avatar}
+            style={{ width: "25px", marginRight: "5px" }}
+            alt={user.name}
+            title="You must have a Gravayar connected to your email to display an image"
+          />
+          Logout
+        </button>
+      </li>
+    </ul>
+  );
+
+  const guestLinks = (
+    <ul className="navbar-nav ml-auto">
+      <li className="nav-item">
+        <Link to="/register" className="nav-link">
+          Sign Up
+        </Link>
+      </li>
+      <li className="nav-item">
+        <Link to="/login" className="nav-link">
+          Login
+        </Link>
+      </li>
+    </ul>
+  );
+
   return (
     <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-4">
       <div className="container">
@@ -27,22 +74,11 @@ const Navbar = () => {
             </li>
           </ul>
 
-          <ul className="navbar-nav ml-auto">
-            <li className="nav-item">
-              <Link to="/register" className="nav-link">
-                Sign Up
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/login" className="nav-link">
-                Login
-              </Link>
-            </li>
-          </ul>
+          {isAuthenticated ? authLinks : guestLinks}
         </div>
       </div>
     </nav>
   );
 };
 
-export default Navbar;
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

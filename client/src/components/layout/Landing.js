@@ -1,7 +1,20 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useHistory } from "react-router-dom";
+import { connect } from "react-redux";
 
-const Landing = () => {
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.login.isAuthenticated,
+});
+
+const Landing = ({ isAuthenticated }) => {
+  const history = useHistory();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      history.push("/dashboard");
+    }
+  }, [isAuthenticated, history]);
+
   return (
     <div className="landing">
       <div className="dark-overlay landing-inner text-light">
@@ -29,4 +42,4 @@ const Landing = () => {
   );
 };
 
-export default Landing;
+export default connect(mapStateToProps)(Landing);
