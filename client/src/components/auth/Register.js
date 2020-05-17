@@ -4,15 +4,15 @@ import { useHistory } from "react-router-dom";
 // Components
 import TextFieldGroup from "../common/TextFieldGroup";
 // Actions
-import { authUser } from "../../ducks";
+import { registerUser } from "../../ducks/slices/registerSlice";
 
-const mapDispatchToProps = { authUser };
+const mapDispatchToProps = { registerUser };
 const mapStateToProps = (state) => ({
   isAuthenticated: state.register.isAuthenticated,
   error: state.register.error,
 });
 
-const Register = ({ authUser, error, isAuthenticated }) => {
+const Register = ({ registerUser, error, isAuthenticated }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,7 +30,7 @@ const Register = ({ authUser, error, isAuthenticated }) => {
   const onSubmit = (e) => {
     e.preventDefault();
     const newUser = { name, email, password, password2 };
-    authUser(newUser, history);
+    registerUser(newUser, history);
   };
 
   const registerTitle = <h1 className="display-4 text-center">Sign Up</h1>;

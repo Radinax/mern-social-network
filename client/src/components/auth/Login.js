@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
-// import classnames from "classnames";
 // Components
 import TextFieldGroup from "../common/TextFieldGroup";
 // Actions
-import { loginUser } from "../../ducks";
-// Utils
-// import { isEmpty } from "../../utils/isEmpty";
+import { loginUser } from "../../ducks/slices/loginSlice";
 
 const mapDispatchToProps = { loginUser };
 const mapStateToProps = (state) => ({

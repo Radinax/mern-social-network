@@ -288,11 +288,13 @@ router.delete(
 router.delete(
   "/",
   passport.authenticate("jwt", { session: false }, (req, res) => {
-    Profile.findOneAndRemove({ user: req.user.id }).then(() => {
-      User.findOneAndRemove({ _id: req.user.id }).then(() =>
-        json({ success: true })
-      );
-    });
+    Profile.findOneAndRemove({ user: res._id })
+      .then(() => {
+        User.findOneAndRemove({ _id: res._id }).then(() =>
+          json({ success: true })
+        );
+      })
+      .catch((err) => res.status(404).json(err));
   })
 );
 

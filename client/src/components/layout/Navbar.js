@@ -1,19 +1,21 @@
 import React from "react";
 import { Link, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
-import { logoutUser } from "../../ducks";
+import { logoutUser } from "../../ducks/slices/loginSlice";
+import { clearProfile } from "../../ducks/slices/profileSlice";
 
-const mapDispatchToProps = { logoutUser };
+const mapDispatchToProps = { logoutUser, clearProfile };
 const mapStateToProps = (state) => ({
   isAuthenticated: state.login.isAuthenticated,
   user: state.login.user,
 });
 
-const Navbar = ({ isAuthenticated, user, logoutUser }) => {
+const Navbar = ({ isAuthenticated, user, logoutUser, clearProfile }) => {
   const history = useHistory();
 
   const onLogOutClick = (e) => {
     e.preventDefault();
+    clearProfile();
     logoutUser(history);
   };
 

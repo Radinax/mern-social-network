@@ -3,8 +3,8 @@ import ReactDOM from "react-dom";
 // Persist Authentication and logut
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
-import { setCurrentUser, logoutUser } from "./ducks";
-import { useHistory } from "react-router-dom";
+import { setCurrentUser, logoutUser } from "./ducks/slices/loginSlice";
+import { clearProfile } from "./ducks/slices/profileSlice";
 // Redux Store
 import { Provider } from "react-redux";
 import { store } from "./ducks";
@@ -25,7 +25,8 @@ if (localStorage.jwtToken) {
   const currentTime = Date.now() / 1000;
   if (decoded.exp < currentTime) {
     // Logout user
-    store.dispatch(logoutUser(useHistory()));
+    store.dispatch(logoutUser());
+    store.dispatch(clearProfile());
     // TODO: Clear current profile
   }
 }
