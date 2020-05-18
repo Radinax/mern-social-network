@@ -22,6 +22,11 @@ const Navbar = ({ isAuthenticated, user, logoutUser, clearProfile }) => {
   const authLinks = (
     <ul className="navbar-nav ml-auto">
       <li className="nav-item">
+        <Link to="/dashboard" className="nav-link">
+          Dashboard
+        </Link>
+      </li>
+      <li className="nav-item">
         <button onClick={onLogOutClick} className="nav-link btn btn-link">
           <img
             className="rounded-circle"

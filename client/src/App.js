@@ -11,6 +11,8 @@ import Login from "./components/auth/Login";
 import Dashboard from "./components/dashboard/Dashboard";
 import PrivateRoute from "./components/common/PrivateRoute";
 import CreateProfile from "./components/createProfile/CreateProfile";
+import EditProfile from "./components/editProfile/EditProfile";
+import AddExperience from "./components/addCredentials/AddExperience";
 
 import "bootstrap/dist/css/bootstrap.css";
 
@@ -31,6 +33,16 @@ const App = () => {
               exact
               path="/create-profile"
               component={CreateProfile}
+            />
+          </Switch>
+          <Switch>
+            <PrivateRoute exact path="/edit-profile" component={EditProfile} />
+          </Switch>
+          <Switch>
+            <PrivateRoute
+              exact
+              path="/add-experience"
+              component={AddExperience}
             />
           </Switch>
         </div>

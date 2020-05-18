@@ -3,7 +3,7 @@ import axios from "axios";
 
 // Api
 export const getCurrentProfile = () => async (dispatch) => {
-  dispatch(profileRequestLoading);
+  dispatch(profileRequestLoading());
   axios
     .get("/api/profile")
     .then((res) => {
@@ -16,11 +16,22 @@ export const getCurrentProfile = () => async (dispatch) => {
     });
 };
 
+// Create Profile
 export const createProfile = (profileData, history) => (dispatch) => {
   axios
     .post("/api/profile", profileData)
     .then((res) => history.push("/dashboard"))
     .catch((err) => dispatch(createProfileError(err.response.data)));
+};
+
+// Add Experience
+export const addExperience = (experienceData, history) => (dispatch) => {
+  axios
+    .post("/api/profile/experience", experienceData, {
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    })
+    .then((res) => history.push("/dashboard"))
+    .catch((err) => dispatch(addExperienceError(err.response.data)));
 };
 
 // Delete Account and Profile
@@ -66,7 +77,7 @@ export const profileSlice = createSlice({
       state.loading = true;
     },
     profilesRequestSuccess: (state, { payload }) => {
-      state.data = payload.data;
+      state.profile = payload.data;
       state.loading = false;
       state.error = false;
     },
@@ -88,6 +99,10 @@ export const profileSlice = createSlice({
       state.loading = false;
       state.error = payload;
     },
+    addExperienceError: (state, { payload }) => {
+      state.loading = false;
+      state.error = payload;
+    },
   },
 });
 
@@ -103,4 +118,5 @@ export const {
   createProfileError,
   deleteAccountSuccess,
   deleteAccountError,
+  addExperienceError,
 } = profileSlice.actions;
