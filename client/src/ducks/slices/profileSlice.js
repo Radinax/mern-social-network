@@ -16,6 +16,19 @@ export const getCurrentProfile = () => async (dispatch) => {
     });
 };
 
+// Get All Profiles
+export const getProfiles = () => async (dispatch) => {
+  dispatch(profilesRequestLoading());
+  axios
+    .get("/api/profile/all")
+    .then((res) => {
+      dispatch(profilesRequestSuccess(res.data));
+    })
+    .catch((err) => {
+      dispatch(profilesRequestError(err.response.data));
+    });
+};
+
 // Create Profile
 export const createProfile = (profileData, history) => (dispatch) => {
   axios
@@ -27,11 +40,17 @@ export const createProfile = (profileData, history) => (dispatch) => {
 // Add Experience
 export const addExperience = (experienceData, history) => (dispatch) => {
   axios
-    .post("/api/profile/experience", experienceData, {
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    })
+    .post("/api/profile/experience", experienceData)
     .then((res) => history.push("/dashboard"))
     .catch((err) => dispatch(addExperienceError(err.response.data)));
+};
+
+// Add Education
+export const addEducation = (educationData, history) => (dispatch) => {
+  axios
+    .post("/api/profile/education", educationData)
+    .then((res) => history.push("/dashboard"))
+    .catch((err) => dispatch(addEducationError(err.response.data)));
 };
 
 // Delete Account and Profile
@@ -45,6 +64,28 @@ export const deleteAccount = () => (dispatch) => {
         deleteAccountError(err.response.data);
       });
   }
+};
+
+// Delete Experience
+export const deleteExperience = (id) => (dispatch) => {
+  axios
+    .delete(`/api/profile/experience/${id}`)
+    .then((res) => dispatch(getCurrentProfile()))
+    .catch((err) => {
+      console.log("err", err);
+      deleteExperienceError(err.response.data);
+    });
+};
+
+// Delete Education
+export const deleteEducation = (id) => (dispatch) => {
+  axios
+    .delete(`/api/profile/education/${id}`)
+    .then((res) => dispatch(getCurrentProfile()))
+    .catch((err) => {
+      console.log("err", err);
+      deleteEducationError(err.response.data);
+    });
 };
 
 // Initial State
@@ -77,7 +118,7 @@ export const profileSlice = createSlice({
       state.loading = true;
     },
     profilesRequestSuccess: (state, { payload }) => {
-      state.profile = payload.data;
+      state.profiles = payload;
       state.loading = false;
       state.error = false;
     },
@@ -103,6 +144,18 @@ export const profileSlice = createSlice({
       state.loading = false;
       state.error = payload;
     },
+    addEducationError: (state, { payload }) => {
+      state.loading = false;
+      state.error = payload;
+    },
+    deleteExperienceError: (state, { payload }) => {
+      state.loading = false;
+      state.error = payload;
+    },
+    deleteEducationError: (state, { payload }) => {
+      state.loading = false;
+      state.error = payload;
+    },
   },
 });
 
@@ -119,4 +172,7 @@ export const {
   deleteAccountSuccess,
   deleteAccountError,
   addExperienceError,
+  addEducationError,
+  deleteExperienceError,
+  deleteEducationError,
 } = profileSlice.actions;

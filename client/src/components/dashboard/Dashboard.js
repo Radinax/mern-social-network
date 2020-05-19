@@ -1,13 +1,17 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+// Components
+import Spinner from "../common/Spinner";
+import ProfileActions from "./ProfileActions";
+import Experience from "./Experience";
+import Education from "./Education";
+// Redux Actions
 import {
   getCurrentProfile,
   deleteAccount,
 } from "../../ducks/slices/profileSlice";
 import { setCurrentUser } from "../../ducks/slices/loginSlice";
-import Spinner from "../common/Spinner";
-import ProfileActions from "./ProfileActions";
 
 const mapDispatchToProps = { getCurrentProfile, setCurrentUser, deleteAccount };
 const mapStateToProps = (state) => ({
@@ -36,6 +40,8 @@ const Dashboard = ({
   if (loading) return <Spinner />;
 
   const handle = profile === null ? "" : profile.handle;
+  const experience = profile === null ? "" : profile.experience;
+  const education = profile === null ? "" : profile.education;
 
   const onDeleteClick = (e) => {
     deleteAccount();
@@ -48,7 +54,8 @@ const Dashboard = ({
         Welcome <Link to={`/profile/${handle}`}>{user.name}</Link>
       </p>
       <ProfileActions />
-      {/* TODO EXP AND EDU */}
+      <Experience data={experience} />
+      <Education data={education} />
       <div style={{ marginBottom: "60px" }} />
       <button onClick={onDeleteClick} className="btn btn-danger">
         Delete My Account

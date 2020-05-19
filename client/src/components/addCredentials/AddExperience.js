@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 // Components
 import Spinner from "../common/Spinner";
 import TextFieldGroup from "../common/TextFieldGroup";
-import { TextAreaFieldGroup } from "../common/TextAreaFieldGroup";
 // Redux Actions
 import { addExperience } from "../../ducks/slices/profileSlice";
 

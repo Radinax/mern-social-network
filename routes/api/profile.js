@@ -184,7 +184,7 @@ router.post(
       return res.status(400).json(errors);
     }
 
-    Profile.findOne({ user: req.user.id }).then((profile) => {
+    Profile.findOne({ user: req.user._id }).then((profile) => {
       const newExp = {
         title: req.body.title,
         company: req.body.company,
@@ -209,7 +209,8 @@ router.post(
 // @access Private
 router.post(
   "/education",
-  passport.authenticate("jwt", { session: false }, (req, res) => {
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
     const { errors, isValid } = validateEducationInput(req.body);
 
     // Check validation
@@ -218,7 +219,7 @@ router.post(
       return res.status(400).json(errors);
     }
 
-    Profile.findOne({ user: req.user.id }).then((profile) => {
+    Profile.findOne({ user: req.user._id }).then((profile) => {
       const newEdu = {
         school: req.body.school,
         degree: req.body.degree,
@@ -234,7 +235,7 @@ router.post(
 
       profile.save().then((profile) => res.json(profile));
     });
-  })
+  }
 );
 
 // @route  DELETE api/profile/experience/:exp_id
@@ -242,7 +243,8 @@ router.post(
 // @access Private
 router.delete(
   "/experience/:exp_id",
-  passport.authenticate("jwt", { session: false }, (req, res) => {
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
     Profile.findOne({ user: req.user.id })
       .then((profile) => {
         // Get remove index
@@ -257,7 +259,7 @@ router.delete(
         profile.save().then((profile) => res.json(profile));
       })
       .catch((err) => res.status(404).json(err));
-  })
+  }
 );
 
 // @route  DELETE api/profile/education/:edu_id
@@ -265,7 +267,8 @@ router.delete(
 // @access Private
 router.delete(
   "/education/:edu_id",
-  passport.authenticate("jwt", { session: false }, (req, res) => {
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
     Profile.findOne({ user: req.user.id })
       .then((profile) => {
         // Get remove index
@@ -280,7 +283,7 @@ router.delete(
         profile.save().then((profile) => res.json(profile));
       })
       .catch((err) => res.status(404).json(err));
-  })
+  }
 );
 
 // @route  DELETE api/profile
