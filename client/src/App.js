@@ -15,6 +15,8 @@ import EditProfile from "./components/editProfile/EditProfile";
 import AddExperience from "./components/addCredentials/AddExperience";
 import AddEducation from "./components/addCredentials/AddEducation";
 import Profiles from "./components/profiles/Profiles";
+import Profile from "./components/profile/Profile";
+import NotFound from "./components/notFound/NotFound";
 
 import "bootstrap/dist/css/bootstrap.css";
 
@@ -55,6 +57,8 @@ const App = () => {
             />
           </Switch>
           <Route exact path="/profiles" component={Profiles} />
+          <Route exact path="/profile/:handle" component={Profile} />
+          <Route exact path="/not-found" component={NotFound} />
         </div>
         <Footer />
       </div>

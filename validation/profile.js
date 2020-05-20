@@ -36,6 +36,8 @@ module.exports = function validateProfileInput(data) {
     }
   }
 
+  console.log("HELLO 3");
+
   if (!isEmpty(data.twitter)) {
     if (!Validator.isURL(data.twitter)) {
       errors.twitter = "Not a valid URL";
@@ -59,6 +61,8 @@ module.exports = function validateProfileInput(data) {
       errors.instagram = "Not a valid URL";
     }
   }
+
+  console.log("error", errors);
 
   return {
     errors,

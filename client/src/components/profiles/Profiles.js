@@ -19,8 +19,10 @@ const Profiles = ({ profiles, loading, getProfiles }) => {
 
   if (loading) return <Spinner />;
 
+  // Used to check if there are any profiles
   const length = profiles === null ? "" : profiles.length;
 
+  // List of all users profiles
   const profileItems =
     profiles &&
     profiles.map((profile) => (
@@ -47,8 +49,12 @@ const Profiles = ({ profiles, loading, getProfiles }) => {
 };
 
 Profiles.propTypes = {
-  profiles: PropTypes.array.isRequired,
+  profiles: PropTypes.array,
   loading: PropTypes.bool.isRequired,
+};
+
+Profiles.defaultProps = {
+  profiles: null,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profiles);

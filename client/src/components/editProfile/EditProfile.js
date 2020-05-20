@@ -1,5 +1,5 @@
 // Libraries
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { useHistory, Link } from "react-router-dom";
@@ -11,6 +11,7 @@ import SelectListGroup from "../common/SelectListGroup";
 import Spinner from "../common/Spinner";
 // Utilities
 import { isEmpty } from "../../utils/isEmpty";
+import { options, initialState, reducer } from "./utils";
 // Redux Action
 import {
   createProfile,
@@ -32,52 +33,42 @@ const EditProfile = ({
   loading,
 }) => {
   const [displaySocialInputs, setDisplaySocialInputs] = useState(false);
-  const [handle, setHandle] = useState("");
-  const [company, setCompany] = useState("");
-  const [website, setWebsite] = useState("");
-  const [location, setLocation] = useState("");
-  const [status, setStatus] = useState("");
-  const [skills, setSkills] = useState("");
-  const [githubUsername, setGithubUsername] = useState("");
-  const [bio, setBio] = useState("");
-  const [twitter, setTwitter] = useState("");
-  const [facebook, setFacebook] = useState("");
-  const [linkedin, setLinkedin] = useState("");
-  const [youtube, setYoutube] = useState("");
-  const [instagram, setInstagram] = useState("");
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const {
+    handle,
+    company,
+    website,
+    location,
+    status,
+    skills,
+    githubUsername,
+    bio,
+    twitter,
+    facebook,
+    linkedin,
+    youtube,
+    instagram,
+  } = state;
   const history = useHistory();
+
+  const keys = Object.keys(initialState);
+
+  const initializeState = (data, social) => {
+    if (!isEmpty(data) && profile[data]) {
+      return dispatch({ field: data, value: profile[data] });
+    }
+  };
+
+  console.log("state", state);
 
   useEffect(() => {
     if (isEmpty(profile)) {
       getCurrentProfile();
     } else {
-      setHandle(!isEmpty(profile.handle) ? profile.handle : "");
-      setCompany(!isEmpty(profile.company) ? profile.company : "");
-      setWebsite(!isEmpty(profile.website) ? profile.website : "");
-      setLocation(!isEmpty(profile.location) ? profile.location : "");
-      setStatus(!isEmpty(profile.status) ? profile.status : "");
-      setSkills(!isEmpty(profile.skills) ? profile.skills.join(",") : "");
-      setGithubUsername(
-        !isEmpty(profile.githubUsername) ? profile.githubUsername : ""
-      );
-      setBio(!isEmpty(profile.bio) ? profile.bio : "");
-      if (!isEmpty(profile.social)) {
-        setTwitter(
-          !isEmpty(profile.social.twitter) ? profile.social.twitter : ""
-        );
-        setFacebook(
-          !isEmpty(profile.social.facebook) ? profile.social.facebook : ""
-        );
-        setLinkedin(
-          !isEmpty(profile.social.linkedin) ? profile.social.linkedin : ""
-        );
-        setYoutube(
-          !isEmpty(profile.social.youtube) ? profile.social.youtube : ""
-        );
-        setInstagram(
-          !isEmpty(profile.social.instagram) ? profile.social.instagram : ""
-        );
-      }
+      // Key will be each property in the initial state
+      keys.forEach((key) => {
+        initializeState(key, !isEmpty(profile.social));
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile]);
@@ -93,7 +84,7 @@ const EditProfile = ({
         website,
         location,
         status,
-        skills,
+        skills: skills.toString(),
         githubUsername,
         bio,
         twitter,
@@ -106,7 +97,12 @@ const EditProfile = ({
     );
   };
 
-  const onChange = (setter) => (e) => setter(e.target.value);
+  // const onChange = (setter) => (e) => setter(e.target.value);
+  const onChange = (e) =>
+    dispatch({
+      field: e.target.name.toLowerCase(),
+      value: e.target.value,
+    });
 
   const onClick = (e) => {
     e.preventDefault();
@@ -120,7 +116,7 @@ const EditProfile = ({
         name="Twitter"
         icon="fab fa-twitter"
         value={twitter}
-        onChange={onChange(setTwitter)}
+        onChange={onChange}
         error={error.twitter}
       />
       <InputGroup
@@ -128,7 +124,7 @@ const EditProfile = ({
         name="Facebook"
         icon="fab fa-facebook"
         value={facebook}
-        onChange={onChange(setFacebook)}
+        onChange={onChange}
         error={error.facebook}
       />
       <InputGroup
@@ -136,12 +132,12 @@ const EditProfile = ({
         name="Instagram"
         icon="fab fa-instagram"
         value={instagram}
-        onChange={onChange(setInstagram)}
+        onChange={onChange}
         error={error.instagram}
       />
       <InputGroup
         placeholder="Youtube Profile URL"
-        onChange={onChange(setYoutube)}
+        onChange={onChange}
         name="Youtube"
         icon="fab fa-youtube"
         value={youtube}
@@ -149,7 +145,7 @@ const EditProfile = ({
       />
       <InputGroup
         placeholder="Linkedin Profile URL"
-        onChange={onChange(setLinkedin)}
+        onChange={onChange}
         name="Linkedin"
         icon="fab fa-linkedin"
         value={linkedin}
@@ -157,46 +153,6 @@ const EditProfile = ({
       />
     </div>
   );
-
-  // Select options for status
-  const options = [
-    {
-      label: "* Select Professional Status",
-      value: 0,
-    },
-    {
-      label: "Developer",
-      value: "Developer",
-    },
-    {
-      label: "Junior Developer",
-      value: "Junior Developer",
-    },
-    {
-      label: "Senior Developer",
-      value: "Senior Developer",
-    },
-    {
-      label: "Manager",
-      value: "Manager",
-    },
-    {
-      label: "Student or Learning",
-      value: "Student or Learning",
-    },
-    {
-      label: "Instructor or Teacher",
-      value: "Instructor or Teacher",
-    },
-    {
-      label: "Intern",
-      value: "Intern",
-    },
-    {
-      label: "Other",
-      value: "Other",
-    },
-  ];
 
   return (
     <div className="create-profile">
@@ -213,7 +169,7 @@ const EditProfile = ({
                 placeholder="* Profile handle"
                 name="handle"
                 value={handle}
-                onChange={onChange(setHandle)}
+                onChange={onChange}
                 error={error.handle}
                 info="A unique handle for your profile URL. You full name, company name, nickname)"
               />
@@ -221,7 +177,7 @@ const EditProfile = ({
                 placeholder="Status"
                 name="status"
                 value={status}
-                onChange={onChange(setStatus)}
+                onChange={onChange}
                 options={options}
                 error={error.status}
                 info="Give us an idea where you are at in your career"
@@ -230,7 +186,7 @@ const EditProfile = ({
                 placeholder="Company"
                 name="company"
                 value={company}
-                onChange={onChange(setCompany)}
+                onChange={onChange}
                 error={error.company}
                 info="Could be your own company or one you work for"
               />
@@ -238,7 +194,7 @@ const EditProfile = ({
                 placeholder="Website"
                 name="website"
                 value={website}
-                onChange={onChange(setWebsite)}
+                onChange={onChange}
                 error={error.website}
                 info="Could be your own website or a company one"
               />
@@ -246,7 +202,7 @@ const EditProfile = ({
                 placeholder="Location"
                 name="location"
                 value={location}
-                onChange={onChange(setLocation)}
+                onChange={onChange}
                 error={error.location}
                 info="City or city & state suggested (eg. Boston, MA)"
               />
@@ -254,7 +210,7 @@ const EditProfile = ({
                 placeholder="* Skills"
                 name="skills"
                 value={skills}
-                onChange={onChange(setSkills)}
+                onChange={onChange}
                 error={error.skills}
                 info="Please use comma separated values (eg. HTML,CSS,Javascript,PHP)"
               />
@@ -262,7 +218,7 @@ const EditProfile = ({
                 placeholder="Github Username"
                 name="githubUsername"
                 value={githubUsername}
-                onChange={onChange(setGithubUsername)}
+                onChange={onChange}
                 error={error.githubUsername}
                 info="If you want your latest repos and a Github link, include your username"
               />
@@ -270,7 +226,7 @@ const EditProfile = ({
                 placeholder="Short Bio"
                 name="bio"
                 value={bio}
-                onChange={onChange(setBio)}
+                onChange={onChange}
                 error={error.bio}
                 info="Tell us a little about yourself"
               />

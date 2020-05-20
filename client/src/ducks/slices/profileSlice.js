@@ -16,6 +16,21 @@ export const getCurrentProfile = () => async (dispatch) => {
     });
 };
 
+// Get profile by handle
+export const getProfileByHandle = (handle) => async (dispatch) => {
+  dispatch(profileRequestLoading());
+  axios
+    .get(`/api/profile/handle/${handle}`)
+    .then((res) => {
+      dispatch(profileRequestSuccess(res.data));
+    })
+    // 046 MIN 09:00 WE ARE NOT USING ERRORS
+    // WILL CHANGE AFTER
+    .catch((err) => {
+      dispatch(profileRequestError(err.response.data));
+    });
+};
+
 // Get All Profiles
 export const getProfiles = () => async (dispatch) => {
   dispatch(profilesRequestLoading());
@@ -156,6 +171,7 @@ export const profileSlice = createSlice({
       state.loading = false;
       state.error = payload;
     },
+    // TODO MERGE ALL ERRORS INTO ONE REDUCER
   },
 });
 
