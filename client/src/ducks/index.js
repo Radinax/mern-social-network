@@ -3,6 +3,7 @@ import { combineReducers } from "redux";
 import { registerSlice } from "./slices/registerSlice";
 import { loginSlice } from "./slices/loginSlice";
 import { profileSlice } from "./slices/profileSlice";
+import { postSlice } from "./slices/postSlice";
 
 // API
 /*
@@ -24,6 +25,7 @@ const reducer = combineReducers({
   register: registerSlice.reducer,
   login: loginSlice.reducer,
   profile: profileSlice.reducer,
+  posts: postSlice.reducer,
 });
 
 // Configuring our store which will be used in Provider to enable Global State

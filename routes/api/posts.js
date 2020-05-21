@@ -97,7 +97,7 @@ router.delete(
 // @route  POST api/posts/like/:id
 // @desc   Like post
 // @access Private
-router.delete(
+router.post(
   "/like/:id",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
@@ -128,7 +128,7 @@ router.delete(
 // @route  POST api/posts/unlike/:id
 // @desc   Unlike post
 // @access Private
-router.delete(
+router.post(
   "/unlike/:id",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
@@ -146,7 +146,7 @@ router.delete(
 
           // Get remove index
           const removeIndex = post.likes
-            .map((item) => item.user.String())
+            .map((item) => item.user.toString())
             .indexOf(req.user.id);
 
           // Splice out of array

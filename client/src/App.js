@@ -16,6 +16,7 @@ import AddExperience from "./components/addCredentials/AddExperience";
 import AddEducation from "./components/addCredentials/AddEducation";
 import Profiles from "./components/profiles/Profiles";
 import Profile from "./components/profile/Profile";
+import Posts from "./components/posts/Posts";
 import NotFound from "./components/notFound/NotFound";
 
 import "bootstrap/dist/css/bootstrap.css";
@@ -55,6 +56,9 @@ const App = () => {
               path="/add-education"
               component={AddEducation}
             />
+          </Switch>
+          <Switch>
+            <PrivateRoute exact path="/feed" component={Posts} />
           </Switch>
           <Route exact path="/profiles" component={Profiles} />
           <Route exact path="/profile/:handle" component={Profile} />
