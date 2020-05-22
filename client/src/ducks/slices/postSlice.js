@@ -13,17 +13,26 @@ export const addPost = (post) => async (dispatch) => {
       dispatch(addPostSuccess(res.data));
     })
     .catch((err) => {
-      dispatch(addPostError(err.response.data));
+      dispatch(errorHandler(err.response.data));
     });
 };
 
 // Get posts
 export const getPosts = () => (dispatch) => {
-  dispatch(getPostsLoading());
+  dispatch(loadingHandler());
   axios
     .get("/api/posts")
     .then((res) => dispatch(getPostsSuccess(res.data)))
-    .catch((err) => dispatch(getPostsError(err.response.data)));
+    .catch((err) => dispatch(errorHandler(err.response.data)));
+};
+
+// Get invidual post
+export const getPost = (id) => (dispatch) => {
+  dispatch(loadingHandler());
+  axios
+    .get(`/api/posts/${id}`)
+    .then((res) => dispatch(getPostSuccess(res.data)))
+    .catch((err) => dispatch(errorHandler(err.response.data)));
 };
 
 // Delete Post
@@ -31,7 +40,7 @@ export const deletePost = (id) => (dispatch) => {
   axios
     .delete(`/api/posts/${id}`)
     .then((res) => dispatch(deletePostSuccess(id)))
-    .catch((err) => dispatch(deletePostsError(err.response.data)));
+    .catch((err) => dispatch(errorHandler(err.response.data)));
 };
 
 // Add like
@@ -39,7 +48,7 @@ export const addLike = (id) => (dispatch) => {
   axios
     .post(`/api/posts/like/${id}`)
     .then((res) => dispatch(getPosts()))
-    .catch((err) => dispatch(addLikeError(err.response.data)));
+    .catch((err) => dispatch(errorHandler(err.response.data)));
 };
 
 // Remove like
@@ -47,7 +56,30 @@ export const removeLike = (id) => (dispatch) => {
   axios
     .post(`/api/posts/unlike/${id}`)
     .then((res) => dispatch(getPosts()))
-    .catch((err) => dispatch(removeLikeError(err.response.data)));
+    .catch((err) => dispatch(errorHandler(err.response.data)));
+};
+
+// Add Comment
+export const addComment = (postId, commentData) => async (dispatch) => {
+  dispatch(clearErrors());
+  axios
+    .post(`/api/posts/comment/${postId}`, { ...commentData })
+    .then((res) => dispatch(getPost(postId)))
+    .catch((err) => {
+      dispatch(errorHandler(err.response.data));
+    });
+};
+
+// Delete Comment
+export const deleteComment = (postId, commentId) => async (dispatch) => {
+  axios
+    .delete(`/api/posts/comment/${postId}/${commentId}`)
+    .then((res) => {
+      dispatch(getPost(postId));
+    })
+    .catch((err) => {
+      dispatch(errorHandler(err.response.data));
+    });
 };
 
 // Initial State
@@ -64,61 +96,59 @@ export const postSlice = createSlice({
   initialState,
   reducers: {
     // ADD POST
-    addPostLoading: (state) => {
-      state.loading = true;
-    },
     addPostSuccess: (state, { payload }) => {
       state.loading = false;
       state.posts = [...state.posts, payload];
       state.user = payload;
     },
-    addPostError: (state, { payload }) => {
-      state.loading = false;
-      state.error = payload;
-    },
     // GET ALL POSTS
-    getPostsLoading: (state) => {
-      state.loading = true;
-    },
     getPostsSuccess: (state, { payload }) => {
       state.loading = false;
       state.posts = payload;
     },
-    getPostsError: (state, { payload }) => {
+    // GET INDIVIDUAL POST
+    getPostSuccess: (state, { payload }) => {
       state.loading = false;
-      state.error = payload;
+      state.post = payload;
     },
     // DELETE POST
     deletePostSuccess: (state, { payload }) => {
       state.loading = false;
       state.posts = state.posts.filter((post) => post._id !== payload);
     },
-    deletePostsError: (state, { payload }) => {
+    // ADD COMMENT
+    addCommentSuccess: (state, { payload }) => {
+      state.loading = false;
+      // Wtf...?
+      state.posts.comment = [...state.posts.comment, payload];
+      state.user = payload;
+    },
+
+    // Handles loading state
+    loadingHandler: (state) => {
+      state.loading = true;
+    },
+    // Handles all errors
+    errorHandler: (state, { payload }) => {
       state.loading = false;
       state.error = payload;
     },
-    // ADD LIKE
-    addLikeError: (state, { payload }) => {
-      state.loading = false;
-      state.error = payload;
-    },
-    removeLikeError: (state, { payload }) => {
-      state.loading = false;
-      state.error = payload;
+    // Clears Error State
+    clearErrors: (state) => {
+      state.errors = "";
     },
   },
 });
 
 // ACTIONS
 export const {
-  addPostLoading,
   addPostSuccess,
-  addPostError,
-  getPostsLoading,
   getPostsSuccess,
-  getPostsError,
+  getPostSuccess,
   deletePostSuccess,
-  deletePostsError,
-  addLikeError,
-  removeLikeError,
+  addCommentSuccess,
+  deleteCommentSuccess,
+  loadingHandler,
+  errorHandler,
+  clearErrors,
 } = postSlice.actions;
