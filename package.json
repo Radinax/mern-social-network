@@ -7,7 +7,8 @@
     "server": "nodemon server.js",
     "client-install": "( cd ./client && yarn install)",
     "client": "( cd ./client && yarn start)",
-    "start": "concurrently \"yarn server\" \"yarn client\""
+    "start": "concurrently \"yarn server\" \"yarn client\"",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix && npm run build --prefix client"
   },
   "author": "Adrian Beria",
   "license": "MIT",
