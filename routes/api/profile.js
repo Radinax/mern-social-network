@@ -194,7 +194,6 @@ router.post(
         current: req.body.current,
         description: req.body.description,
       };
-      console.log("req", req);
 
       // Add to experinece array
       profile.experience.unshift(newExp);

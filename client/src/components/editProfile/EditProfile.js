@@ -59,8 +59,6 @@ const EditProfile = ({
     }
   };
 
-  console.log("state", state);
-
   useEffect(() => {
     if (isEmpty(profile)) {
       getCurrentProfile();

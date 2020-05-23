@@ -19,6 +19,7 @@ export const addPost = (post) => async (dispatch) => {
 
 // Get posts
 export const getPosts = () => (dispatch) => {
+  dispatch(clearErrors());
   dispatch(loadingHandler());
   axios
     .get("/api/posts")
@@ -29,6 +30,7 @@ export const getPosts = () => (dispatch) => {
 // Get invidual post
 export const getPost = (id) => (dispatch) => {
   dispatch(loadingHandler());
+  dispatch(clearErrors());
   axios
     .get(`/api/posts/${id}`)
     .then((res) => dispatch(getPostSuccess(res.data)))
@@ -135,7 +137,7 @@ export const postSlice = createSlice({
     },
     // Clears Error State
     clearErrors: (state) => {
-      state.errors = "";
+      state.error = "";
     },
   },
 });
