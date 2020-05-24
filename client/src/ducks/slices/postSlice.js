@@ -7,6 +7,7 @@ import axios from "axios";
 export const addPost = (post) => async (dispatch) => {
   // TODO: ADD POSTING IN STATE!
   // dispatch(addPostLoading())
+  dispatch(clearErrors());
   axios
     .post("/api/posts", { ...post })
     .then((res) => {
@@ -100,7 +101,7 @@ export const postSlice = createSlice({
     // ADD POST
     addPostSuccess: (state, { payload }) => {
       state.loading = false;
-      state.posts = [...state.posts, payload];
+      state.posts = [payload, ...state.posts];
       state.user = payload;
     },
     // GET ALL POSTS
