@@ -58,7 +58,7 @@ const PostForm = ({ addPost, user, error }) => {
 PostForm.propTypes = {
   addPost: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
-  error: PropTypes.object.isRequired,
+  error: PropTypes.string.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostForm);

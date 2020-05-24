@@ -13,7 +13,7 @@
     "client-install": "( cd ./client && yarn install)",
     "client": "( cd ./client && yarn start)",
     "start": "concurrently \"yarn server\" \"yarn client\"",
-    "heroku-postbuild": "YARN_PRODUCTION=false yarn install && yarn --cwd ./client install && yarn --cwd ./client build"
+    "heroku-postbuild": "cd client && yarn install && yarn build"
   },
   "author": "Adrian Beria",
   "license": "MIT",
